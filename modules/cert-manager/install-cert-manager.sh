@@ -4,8 +4,8 @@ set -e
 
 CERT_MANAGER_VERSION="v1.14.4"
 NAMESPACE_CERT_MANAGER="cert-manager"
-ROOT_CA_KEY="../certs/root-ca.key"
-ROOT_CA_CERT="../certs/root-ca.crt"
+ROOT_CA_KEY="../../.certs/root-ca.key"
+ROOT_CA_CERT="../../.certs/root-ca.crt"
 ISSUER_CERT="./certificates/clusterissuer-template-root-ca.yaml"
 
 kubectl create namespace "$NAMESPACE_CERT_MANAGER" --dry-run=client -o yaml | kubectl apply -f -

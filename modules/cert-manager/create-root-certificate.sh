@@ -2,11 +2,11 @@
 
 set -e
 
-CA_KEY="../certs/root-ca.key"
-CA_CERT="../certs/root-ca.crt"
+CA_KEY="../../.certs/root-ca.key"
+CA_CERT="../../.certs/root-ca.crt"
 
-if [ ! -d "../certs" ]; then
-  mkdir -p "../certs"
+if [ ! -d "../../.certs" ]; then
+  mkdir -p "../../.certs"
 fi
 
 openssl genrsa -out "$CA_KEY" 2048
