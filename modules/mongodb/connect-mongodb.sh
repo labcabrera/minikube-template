@@ -16,6 +16,4 @@ kubectl run --namespace mongodb \
 
 # mongosh admin --host "mongodb" --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD
 
-# kubectl port-forward --namespace mongodb svc/mongodb 27017:27017
-
 # mongosh --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD

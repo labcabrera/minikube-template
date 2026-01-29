@@ -2,5 +2,4 @@
 
 kubectl create namespace kong
 
-helm install kong kong/kong -n kong \
-  --set ingressController.installCRDs=false
+helm upgrade --install kong kong/kong -n kong -f config/values.yaml

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-users-api
+  annotations:
+    kubernetes.io/ingress.className: nginx-ingress
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - sample-users-api.local
+      secretName: sample-users-api-tls
+  rules:
+    - host: sample-users-api.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sample-users-api
+                port:
+                  number: 80
+

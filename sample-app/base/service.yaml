@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-users-api
+  labels:
+    k8s-app: sample-users-api
+spec:
+  selector:
+    k8s-app: sample-users-api
+  type: ClusterIP
+  ports:
+  - name: web
+    port: 80
+    targetPort: 8083
+    protocol: TCP

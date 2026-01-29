@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-users-api
+  labels:
+    k8s-app: sample-users-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s-app: sample-users-api
+  template:
+    metadata:
+      labels:
+        k8s-app: sample-users-api
+    spec:
+      imagePullSecrets:
+      - name: registrykey
+      containers:
+      - name: sample-users-api
+        image: labcabrera/sample-users-api:latest
+        env:
+        - name: TZ
+          value: Europe/Madrid
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: sample-users-api-config
+              key: log_level
+        - name: JAVA_OPTS
+          valueFrom:
+            configMapKeyRef:
+              name: sample-users-api-config
+              key: java_opts
+        - name: FOO_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sample-users-api-secret
+              key: foo
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8083
+          name: web
+          protocol: TCP

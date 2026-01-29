@@ -2,10 +2,8 @@
 
 kubectl create namespace mongodb
 
-# helm repo add bitnami https://charts.bitnami.com/bitnami
-# helm repo update
-
-helm install mongodb bitnami/mongodb -n mongodb \
+helm upgrade --install mongodb bitnami/mongodb  \
+  -n mongodb \
   --set architecture=standalone \
   --set auth.enabled=true \
   --set auth.rootPassword='changeit' \
