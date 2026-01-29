@@ -1,0 +1,14 @@
+config:
+  port: 1337
+  node_env: production
+
+  # MongoDB
+  db_adapter: mongo
+  db_host: konga-mongo-mongodb
+  db_port: 27017
+  db_user: konga
+  db_password: changeit
+  db_database: konga
+
+# Para mongo, normalmente NO necesitas el job de migraciones del chart
+runMigrations: false
