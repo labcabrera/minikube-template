@@ -24,7 +24,7 @@ EOF
 }
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TEMPLATES_DIR="$SCRIPTDIR/configuration"
+TEMPLATES_DIR="$SCRIPTDIR/config"
 
 main() {
   WITH_POSTGRES=false
