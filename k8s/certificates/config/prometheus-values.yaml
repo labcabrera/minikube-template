@@ -1,0 +1,30 @@
+grafana:
+  enabled: true
+  adminPassword: changeit
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  persistence:
+    enabled: false
+
+prometheus:
+  ingress:
+    enabled: false
+  prometheusSpec:
+    # No sobreescribir arbitrariamente con --set; defínelo como objeto en el values.yaml
+    # serviceMonitorNamespaceSelector: {}            # <- habilita si necesitas
+    serviceMonitorSelector:
+      matchLabels:
+        app: sample-loki-api
+    retention: 30d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 10Gi
+
+alertmanager:
+  ingress:
+    enabled: false

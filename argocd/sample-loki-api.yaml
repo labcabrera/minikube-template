@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sample-loki-api
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sample-apps
+  source:
+    path: sample-loki-api/k8s/overlays/dev
+    repoURL: https://github.com/labcabrera/sample-spring-boot-loki-integration
+    targetRevision: HEAD
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

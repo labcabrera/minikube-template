@@ -1,0 +1,127 @@
+services:
+  sample-mongo:
+    image: mongo:8.0
+    hostname: sample-mongo
+    container_name: sample-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - sample-mongo-data:/data/db
+    networks:
+      - sample-network
+
+  sample-postgres:
+    image: postgres:16
+    hostname: sample-postgres
+    container_name: sample-postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    networks:
+      - sample-network
+    volumes:
+      - sample-postgres-data:/var/lib/postgresql/data
+
+  sample-redis:
+    image: redis:7.2
+    hostname: sample-redis
+    container_name: sample-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - sample-redis-data:/data
+    networks:
+      - sample-network
+
+  sample-keycloak:
+    image: quay.io/keycloak/keycloak:26.3
+    hostname: sample-keycloak
+    container_name: sample-keycloak
+    command:
+      - start
+      - --features=scripts
+      - --http-enabled=true
+      - --hostname=localhost
+    ports:
+      - "8090:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL_HOST: sample-postgres
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
+      KC_HOSTNAME: localhost
+      KC_LOG_LEVEL: INFO
+    volumes:
+      - sample-keycloak-data:/opt/keycloak/data
+    networks:
+      - sample-network
+
+  sample-kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    hostname: sample-kafka-broker
+    container_name: sample-kafka-broker
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://sample-kafka-broker:9092,PLAINTEXT_HOST://localhost:9093"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:9093,CONTROLLER://0.0.0.0:9094"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@sample-kafka-broker:9094"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: localhost
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    volumes:
+      - sample-kafka-data:/var/lib/kafka/data
+    networks:
+      - sample-network
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: sample-kafka-ui
+    depends_on:
+      - sample-kafka
+    ports:
+      - "8091:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: sample-kafka-broker:9092
+      KAFKA_CLUSTERS_0_READONLY: false
+      AUTH_TYPE: "LOGIN_FORM"
+      SPRING_SECURITY_USER_NAME: admin
+      SPRING_SECURITY_USER_PASSWORD: admin
+    networks:
+      - sample-network
+
+volumes:
+  sample-mongo-data:
+    driver: local
+  sample-keycloak-data:
+    driver: local
+  sample-postgres-data:
+    driver: local
+  sample-kafka-data:
+    driver: local
+  sample-redis-data:
+    driver: local
+
+networks:
+  sample-network:
+    external: true

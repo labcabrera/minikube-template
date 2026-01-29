@@ -1,0 +1,9 @@
+= Minikube Template
+
+== Instalación
+
+Para iniciar el clúster de Minikube, ejecute el siguiente comando en la terminal:
+
+./minikube/minikube-install.sh
+
+Esto ejecutará el script de instalación que configura Minikube con el perfil adecuado.
