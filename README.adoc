@@ -7,3 +7,21 @@ Para iniciar el clúster de Minikube, ejecute el siguiente comando en la termina
 ./minikube/minikube-install.sh
 
 Esto ejecutará el script de instalación que configura Minikube con el perfil adecuado.
+
+== Namespaces utilizados
+
+|===
+| Namespace | Descripción
+| `applications` | Namespace para aplicaciones desplegadas en el clúster.
+| `cert-manager` | Namespace para recursos relacionados con la gestión de certificados.
+| `cicd` | Namespace para recursos relacionados con CI/CD.
+|===
+
+== Módulos
+
+=== Cert-Manager
+
+Cert-Manager es una herramienta que automatiza la gestión de certificados TLS en Kubernetes. En este proyecto, se utiliza para gestionar los certificados necesarios para asegurar las comunicaciones dentro del clúster.
+
+Para ello utilizaremos un cerfificado autofirmado generado a partir de openssl, el cual se encuentra en el directorio `certs` y se llama `ca.crt`. Este certificado se utilizará para crear un Issuer en Cert-Manager, que luego se usará para emitir certificados TLS para nuestras aplicaciones.
+
