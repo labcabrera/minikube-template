@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sample-user-api
+  name: sample-users-api
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: cicd
+    namespace: applications
   source:
     path: k8s/overlays/applications
-    repoURL: https://github.com/labcabrera/sample-user-api
+    repoURL: https://github.com/labcabrera/sample-users-api
     targetRevision: HEAD
   sources: []
   project: default

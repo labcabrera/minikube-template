@@ -35,3 +35,16 @@ kubectl port-forward service/argocd-server -n cicd 8080:443
 ----
 
 WARNING: TODO: Fix Ingress TLS
+
+Podemos instalar la aplicación de ejemplo https://github.com/labcabrera/sample-users-api utilizando el manifiesto `sample-users-api-argocd-project.yaml` ubicado en `modules/argocd/sample-projects/`.
+
+Esto utilizará kustomize para desplegar los recursos definidos en el repositorio de ejemplo, lo que nos permitirá ver cómo ArgoCD gestiona las aplicaciones desplegadas en el clúster.
+
+Para verificar que nuestra aplicación se ha desplegado correctamente ejecutaremos:
+
+[source,bash]
+----
+curl -v --insecure https://sample-users-api.local/actuator/health
+----
+
+TIP: Deberemos haber agregado una entrada en nuestro archivo `/etc/hosts` para resolver `sample-users-api.local` a la IP de Minikube que podremos obtener ejecutando `minikube ip -p minikube-template`.
