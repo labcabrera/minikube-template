@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-users-ingress
+  namespace: applications
+  annotations:
+    kubernetes.io/ingress.class: kong
+    # opcional: quita el prefijo /users al enrutar al upstream
+    konghq.com/strip-path: "true"
+spec:
+  ingressClassName: kong
+  rules:
+  # opcional; quita o cambia si no usas host-based routing
+  - host: sample-users-api-route.local
+    http:
+      paths:
+      - path: /users
+        pathType: Prefix
+        backend:
+          service:
+            name: sample-users-api
+            port:
+              number: 80

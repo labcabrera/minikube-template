@@ -1,0 +1,3 @@
+gateway:
+  proxy:
+    type: NodePort
