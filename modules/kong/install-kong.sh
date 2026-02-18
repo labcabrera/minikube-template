@@ -18,6 +18,8 @@ YAML
 
 helm upgrade --install kong kong/ingress -n kong -f values.yaml
 
+kubectl apply -f config/kong-gateway.yaml
+
 # Check
 kubectl get pods -n kong
 kubectl get svc -n kong

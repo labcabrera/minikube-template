@@ -48,3 +48,73 @@ curl -v --insecure https://sample-users-api.local/actuator/health
 ----
 
 TIP: Deberemos haber agregado una entrada en nuestro archivo `/etc/hosts` para resolver `sample-users-api.local` a la IP de Minikube que podremos obtener ejecutando `minikube ip -p minikube-template`.
+
+=== Kong
+
+En primer lugar instalaremos los CRDs:
+
+[source,bash]
+----
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+----
+
+Después realizaremos la instalación de Kong por defecto utilizando Helm:
+
+[source,bash]
+----
+helm install kong kong/ingress -n kong
+----
+
+En nuestro caso como no tenemos un LoadBalancer externo haremos:
+
+[source,bash]
+----
+cat > values.yaml <<'YAML'
+gateway:
+  proxy:
+    type: NodePort
+YAML
+
+helm upgrade --install kong kong/ingress -n kong -f values.yaml
+----
+
+Después crearemos el gateway haciendo:
+
+----
+kubectl apply -f kong-gateway.yaml
+----
+
+Y verificaremos que ha sido creado correctamente:
+
+----
+kubectl get gateways -A
+NAMESPACE   NAME   CLASS   ADDRESS   PROGRAMMED   AGE
+kong        kong   kong              True         3m20s
+----
+
+Una vez creado el gateway crearemos una ruta de ejemplo:
+
+----
+kubectl apply -f sample-user-api-route.yaml
+----
+
+TIP: En esta ruta hemos aplicado la regla de reescritura para que el path de la ruta sea `/` en lugar de `/users`, lo que nos permitirá acceder a la aplicación sin necesidad de incluir el path completo en la URL.
+
+Para comprobar que funciona obtendremos la IP del gateway:
+
+----
+minikube service -n kong kong-gateway-proxy --url -p minikube-template
+http://192.168.58.2:31698
+http://192.168.58.2:31893
+----
+
+Y finalmente haremos una petición a la ruta de ejemplo:
+
+----
+curl http://192.168.58.2:31698/users/actuator/health
+
+http://192.168.58.2:31893/users/actuator/health
+
+curl --insecure https://192.168.58.2:31893/users/actuator/health
+----
+
