@@ -25,3 +25,13 @@ Cert-Manager es una herramienta que automatiza la gestión de certificados TLS e
 
 Para ello utilizaremos un cerfificado autofirmado generado a partir de openssl, el cual se encuentra en el directorio `certs` y se llama `ca.crt`. Este certificado se utilizará para crear un Issuer en Cert-Manager, que luego se usará para emitir certificados TLS para nuestras aplicaciones.
 
+=== ArgoCD
+
+Instalación básica de ArgoCD utilizando Helm. Para acceder a la interfaz de usuario de ArgoCD, se puede utilizar el siguiente comando para hacer un port-forwarding:
+
+[source,bash]
+----
+kubectl port-forward service/argocd-server -n cicd 8080:443
+----
+
+WARNING: TODO: Fix Ingress TLS

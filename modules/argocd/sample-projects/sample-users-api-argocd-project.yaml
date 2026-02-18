@@ -5,9 +5,9 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: applications
+    namespace: cicd
   source:
-    path: k8s
+    path: k8s/overlays/applications
     repoURL: https://github.com/labcabrera/sample-user-api
     targetRevision: HEAD
   sources: []
